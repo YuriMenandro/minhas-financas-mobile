@@ -8,21 +8,17 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { TabRoutes } from './routes/TabRoutes';
 
-// BoasVindasScreen será criada no Passo 9
+import { TransacoesProvider } from './context/TransacoesContext';
 
 import { BoasVindasScreen } from './screens/BoasVindasScreen';
 
 
 export default function App() {
 
-  // Controla qual "árvore" de componentes é renderizada (navegação condicional, Passo 9)
+  // Mantém a navegação condicional da Aula 3 (tela de boas-vindas no primeiro acesso)
 
   const [primeiroAcesso, setPrimeiroAcesso] = useState(true);
 
-
-  // Se for o primeiro acesso, mostra a tela de boas-vindas
-
-  // fora do NavigationContainer — ela não precisa de navegação
 
   if (primeiroAcesso) {
 
@@ -43,11 +39,15 @@ export default function App() {
 
     <SafeAreaProvider>
 
-      <NavigationContainer>
+      <TransacoesProvider>
 
-        <TabRoutes />
+        <NavigationContainer>
 
-      </NavigationContainer>
+          <TabRoutes />
+
+        </NavigationContainer>
+
+      </TransacoesProvider>
 
     </SafeAreaProvider>
 

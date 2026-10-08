@@ -14,6 +14,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { cores, espacamento, raio } from '../theme';
 
+import { useTransacoes } from '../context/TransacoesContext';  // ← NOVO
+
 
 const CATEGORIAS = [
 
@@ -45,13 +47,16 @@ export function NovaTransacaoScreen({ navigation }) {
   const [categoria, setCategoria] = useState('outros');
 
 
-  const salvar = () => {
+  const { adicionarTransacao } = useTransacoes();  // ← NOVO (dentro do componente)
 
-    // Validação básica
+
+  // ↓ Função salvar atualizada para usar o contexto
+
+  const salvar = async () => {
 
     if (!descricao.trim()) {
 
-      Alert.alert('Atenção', 'Digite uma descrição para a transação.');
+      Alert.alert('Atenção', 'Digite uma descrição.');
 
       return;
 
@@ -61,14 +66,14 @@ export function NovaTransacaoScreen({ navigation }) {
 
     if (!valor || isNaN(valorNumerico) || valorNumerico <= 0) {
 
-      Alert.alert('Atenção', 'Digite um valor válido maior que zero.');
+      Alert.alert('Atenção', 'Digite um valor válido.');
 
       return;
 
     }
 
 
-    const novaTransacao = {
+    await adicionarTransacao({
 
       id: Date.now().toString(),
 
@@ -82,21 +87,8 @@ export function NovaTransacaoScreen({ navigation }) {
 
       data: new Date().toLocaleDateString('pt-BR'),
 
-    };
-
-
-    // Passa a nova transação para o screen DashboardHome (dentro do DashboardStack)
-
-    navigation.navigate('Dashboard', {
-
-      screen: 'DashboardHome',
-
-      params: { novaTransacao },
-
     });
 
-
-    // Limpa o formulário
 
     setDescricao('');
 
@@ -105,6 +97,9 @@ export function NovaTransacaoScreen({ navigation }) {
     setTipo('despesa');
 
     setCategoria('outros');
+
+
+    navigation.navigate('Dashboard');
 
   };
 
@@ -115,8 +110,6 @@ export function NovaTransacaoScreen({ navigation }) {
 
       <Text style={styles.tituloPagina}>Nova Transação</Text>
 
-
-      {/* Tipo: Receita ou Despesa */}
 
       <Text style={styles.label}>Tipo</Text>
 
@@ -163,8 +156,6 @@ export function NovaTransacaoScreen({ navigation }) {
       </View>
 
 
-      {/* Descrição */}
-
       <Text style={styles.label}>Descrição</Text>
 
       <TextInput
@@ -184,8 +175,6 @@ export function NovaTransacaoScreen({ navigation }) {
       />
 
 
-      {/* Valor */}
-
       <Text style={styles.label}>Valor (R$)</Text>
 
       <TextInput
@@ -204,8 +193,6 @@ export function NovaTransacaoScreen({ navigation }) {
 
       />
 
-
-      {/* Categoria */}
 
       <Text style={styles.label}>Categoria</Text>
 
@@ -257,8 +244,6 @@ export function NovaTransacaoScreen({ navigation }) {
 
       </View>
 
-
-      {/* Botão Salvar */}
 
       <TouchableOpacity style={styles.botaoSalvar} onPress={salvar} activeOpacity={0.8}>
 
