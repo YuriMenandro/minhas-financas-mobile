@@ -1,6 +1,6 @@
 // App.js
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -12,42 +12,60 @@ import { TransacoesProvider } from './context/TransacoesContext';
 
 import { BoasVindasScreen } from './screens/BoasVindasScreen';
 
+import {
 
-export default function App() {
+  PrimeiroAcessoProvider,
 
-  // Mantém a navegação condicional da Aula 3 (tela de boas-vindas no primeiro acesso)
+  usePrimeiroAcesso,
 
-  const [primeiroAcesso, setPrimeiroAcesso] = useState(true);
+} from './context/PrimeiroAcessoContext';
+
+
+function ConteudoApp() {
+
+  const { primeiroAcesso, carregando, concluir } = usePrimeiroAcesso();
+
+
+  // Enquanto lê o AsyncStorage, evita o flash da tela de boas-vindas
+
+  if (carregando) return null;
 
 
   if (primeiroAcesso) {
 
-    return (
-
-      <SafeAreaProvider>
-
-        <BoasVindasScreen onConcluir={() => setPrimeiroAcesso(false)} />
-
-      </SafeAreaProvider>
-
-    );
+    return <BoasVindasScreen onConcluir={concluir} />;
 
   }
 
 
   return (
 
+    <TransacoesProvider>
+
+      <NavigationContainer>
+
+        <TabRoutes />
+
+      </NavigationContainer>
+
+    </TransacoesProvider>
+
+  );
+
+}
+
+
+export default function App() {
+
+  return (
+
     <SafeAreaProvider>
 
-      <TransacoesProvider>
+      <PrimeiroAcessoProvider>
 
-        <NavigationContainer>
+        <ConteudoApp />
 
-          <TabRoutes />
-
-        </NavigationContainer>
-
-      </TransacoesProvider>
+      </PrimeiroAcessoProvider>
 
     </SafeAreaProvider>
 

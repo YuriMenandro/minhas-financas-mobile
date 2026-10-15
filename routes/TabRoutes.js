@@ -6,15 +6,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
 
-// A aba Dashboard aponta para um Stack (criado no Passo 8), não diretamente para a tela
+import { DashboardStack }       from './DashboardStack';
 
-import { DashboardStack } from './DashboardStack';
+import { NovaTransacaoScreen }  from '../screens/NovaTransacaoScreen';
 
-import { NovaTransacaoScreen } from '../screens/NovaTransacaoScreen';
+import { RelatorioScreen }      from '../screens/RelatorioScreen';
 
-import { RelatorioScreen } from '../screens/RelatorioScreen';
+import { MapaScreen }           from '../screens/MapaScreen'; // ← NOVO
 
-import { SobreScreen } from '../screens/SobreScreen';
+import { SobreScreen }          from '../screens/SobreScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -22,13 +22,15 @@ const Tab = createBottomTabNavigator();
 
 const ICONES_TAB = {
 
-  Dashboard: { ativa: 'home', inativa: 'home-outline' },
+  Dashboard:         { ativa: 'home',                 inativa: 'home-outline'                 },
 
-  'Nova Transação': { ativa: 'add-circle', inativa: 'add-circle-outline' },
+  'Nova Transação':  { ativa: 'add-circle',           inativa: 'add-circle-outline'           },
 
-  Relatório: { ativa: 'bar-chart', inativa: 'bar-chart-outline' },
+  Relatório:         { ativa: 'bar-chart',            inativa: 'bar-chart-outline'            },
 
-  Sobre: { ativa: 'information-circle', inativa: 'information-circle-outline' },
+  Mapa:              { ativa: 'map',                  inativa: 'map-outline'                  }, // ← NOVO
+
+  Sobre:             { ativa: 'information-circle',   inativa: 'information-circle-outline'   },
 
 };
 
@@ -43,7 +45,7 @@ export function TabRoutes() {
 
         headerShown: false,
 
-        tabBarActiveTintColor: '#2c3e50',
+        tabBarActiveTintColor:   '#2c3e50',
 
         tabBarInactiveTintColor: '#95a5a6',
 
@@ -51,7 +53,11 @@ export function TabRoutes() {
 
           backgroundColor: '#fff',
 
-          borderTopColor: '#eee'
+          borderTopColor:  '#eee',
+
+          paddingBottom:   8,
+
+          paddingTop:      4,
 
         },
 
@@ -67,16 +73,19 @@ export function TabRoutes() {
 
     >
 
-      <Tab.Screen name="Dashboard" component={DashboardStack} />
+      <Tab.Screen name="Dashboard"       component={DashboardStack}      />
 
-      <Tab.Screen name="Nova Transação" component={NovaTransacaoScreen} />
+      <Tab.Screen name="Nova Transação"  component={NovaTransacaoScreen} />
 
-      <Tab.Screen name="Relatório" component={RelatorioScreen} />
+      <Tab.Screen name="Relatório"       component={RelatorioScreen}     />
 
-      <Tab.Screen name="Sobre" component={SobreScreen} />
+      <Tab.Screen name="Mapa"            component={MapaScreen}          />
+
+      <Tab.Screen name="Sobre"           component={SobreScreen}         />
 
     </Tab.Navigator>
 
   );
 
 }
+
